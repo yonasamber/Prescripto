@@ -25,12 +25,54 @@ const AddDoctor = () => {
       if (!docImg) {
         return toast.error("Image not selected");
       }
+
+      const formData = new FormData();
+
+      formData.append("image", docImg);
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("experience", experience);
+      formData.append("fees", Number(fees));
+      formData.append("about", about);
+      formData.append("speciality", speciality);
+      formData.append("degree", degree);
+      formData.append(
+        "address",
+        JSON.stringify({ line1: address1, line2: address2 }),
+      );
+
+      //logging formdata on the console
+
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+
+      /// api call
+
       const { data } = await axios.post(
         backendUrl + "/api/admin/add-doctor",
-        {},
+        formData,
+        { headers: { aToken } },
       );
-      console.log(data);
+
+      if (data.success) {
+        toast.success(data.message);
+
+        setDocImg(false);
+        setName("");
+        setPassword("");
+        setEmail("");
+        setAddress1("");
+        setAddress2("");
+        setDegree("");
+        setAbout("");
+        setFees("");
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
+      toast.error(error.message);
       console.log(error);
     }
   };
