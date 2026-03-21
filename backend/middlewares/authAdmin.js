@@ -11,7 +11,6 @@ const authAdmin = async (req, res, next) => {
         message: "Not Authorized, try logging in again",
       });
     }
-
     const token_decode = jwt.verify(atoken, process.env.JWT_SECRET);
 
     if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
